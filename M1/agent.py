@@ -18,7 +18,7 @@ class CleanerAgent(mesa.Agent):
         self.model.grid.move_agent(self, new_position)
 
     def cleanCell(self):
-        cellmates = self.model.grid.get_cell_list_contents([self.pos])
+
         if len(self.pos) == 2:
             other_agent = self.random.choice(self.model.schedule.agents)
             if(other_agent == TrashAgent):
