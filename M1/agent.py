@@ -5,7 +5,7 @@ from mesa.visualization.UserParam import UserSettableParameter
 """
 """
 
-class MoneyAgent(mesa.Agent):
+class CleanerAgent(mesa.Agent):
     """An agent with fixed initial wealth."""
 
     def __init__(self, unique_id, model):
@@ -43,7 +43,7 @@ class TrashAgent(mesa.Agent):
 
 
 
-class MoneyModel(mesa.Model):
+class CleaningModel(mesa.Model):
 
     def __init__(self, NumCleaners, NumTrash, width, height):
         self.boxCoords = [] 
@@ -54,7 +54,7 @@ class MoneyModel(mesa.Model):
 
         #setup agents on grid
         for i in range(self.num_agents):
-            a = MoneyAgent(i, self)
+            a = CleanerAgent(i, self)
             self.schedule.add(a)
             self.grid.place_agent(a, (1, 1))
 
