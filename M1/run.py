@@ -25,9 +25,9 @@ def agent_portrayal(agent):
 
 grid = mesa.visualization.CanvasGrid(agent_portrayal, 10, 10, 500, 500)
 server = mesa.visualization.ModularServer(
-    MoneyModel, [grid], "Box Model", {"NumCleaners": 5, "NumTrash": 15, "width": 10, "height": 15}
+    CleaningModel, [grid], "Box Model", {"NumCleaners": 5, "NumTrash": 15, "width": 10, "height": 15}
 )
-server = ModularServer(MoneyModel,
+server = ModularServer(CleaningModel,
                        [grid],
                        "Box Model",
                        {"NumCleaners": 5, "NumTrash": 15, "width": 10, "height": 15})
