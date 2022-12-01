@@ -1,35 +1,33 @@
-from agent import *
-from mesa.visualization.modules import CanvasGrid
-from mesa.visualization.ModularVisualization import ModularServer
-from mesa.visualization.UserParam import UserSettableParameter
 import mesa
+import math
+import random
+from agent import RobotAgent
+from box import BoxAgent
 
 
-def agent_portrayal(agent):
+class BoxModel(mesa.Model):
 
-    portrayal = {"Filled": "true"}
-    if agent.unique_id < 5:
-        portrayal["Shape"] = "circle"
-        portrayal["Color"] = "green"
-        portrayal["Layer"] = 0
-        portrayal["r"] = 0.5
-    else:
-        portrayal["Shape"] = "rect"
-        portrayal["Color"] = "red"
-        portrayal["Layer"] = "1"
-        portrayal["w"] = 0.2
-        portrayal["h"] = 0.2
-        portrayal["xAlign"] = 0.5
-        portrayal["yAlign"] = 0.5
-    return portrayal
+    def __init__(self, N, width, height, K):
+        self.boxCoords = [] 
+        self.num_agents = N
+        self.num_box = K
+        self.grid = mesa.space.MultiGrid(width, height, True)
+        self.schedule = mesa.time.RandomActivation(self)
 
-grid = mesa.visualization.CanvasGrid(agent_portrayal, 10, 10, 500, 500)
-server = mesa.visualization.ModularServer(
-    CleaningModel, [grid], "Box Model", {"NumCleaners": 5, "NumTrash": 15, "width": 10, "height": 10}
-)
-server = ModularServer(CleaningModel,
-                       [grid],
-                       "Box Model",
-                       {"NumCleaners": 5, "NumTrash": 15, "width": 10, "height": 10})
-server.port = 8520 # The default
-server.launch()
+        #setup agents on grid
+        for i in range(self.num_agents):
+            a = RobotAgent(i, self)
+            self.schedule.add(a)
+            self.grid.place_agent(a, (0,i))
+
+        #setup boxes
+        for i in range(self.num_box):
+            
+            b = BoxAgent(i + self.num_box, self)
+            self.schedule.add(b)
+            z = self.grid.find_empty()
+            self.boxCoords.append(z)
+            self.grid.place_agent(b, (z))
+
+    def step(self):
+        self.schedule.step()
